@@ -20,10 +20,23 @@ def RiskScore = getCustomFieldValue("Risk Number")
 
 log.debug ("Read RiskScore value as:${RiskScore} ")
 StringedScore=RiskScore.toString()
-log.debug ("RiskSCore as .toStringed:${StringedScore}")
+
 // apparentrly scripted field will get the full HTML content (works same way as with DropDownLists  
+// reg expressing numerical value from HTML string
+
+def re = StringedScore =~ /^(.+)(>)(\d)(<)(.*)/   // Parsing DropDown Menu number (see header for HTML string)
+if (re.matches() ) {
+	value= re[0][3]  
+	log.info("Value as int : ${value}" )  // can be used calculations as HTML filtered out
+	log.info("Value as string : ${value.toString()}" )
+}
+else {
+	log.error("No number match" )
+	}
+
+
     
-return (RiskScore.toString())
+return (value.toString())  // shown ok in Scripted Field (and no HTML code collows)
 
            
 
